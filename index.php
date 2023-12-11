@@ -1,17 +1,18 @@
 <?php
 
-    //destroy the session
+    // Destroy the session (if any)
     session_start();
     session_destroy();
 
-    function alert ($msg,$type) {
+    // Function to display an alert message
+    function alert ($msg, $type) {
         echo "
         <div class='alert $type' id='alert'>
             <strong>$msg</strong>
             <span class='bi bi-x-circle-fill closebtn' id='closebtn'></span>  
         </div> ";
 
-        //remove the alert after 3 seconds
+        // Remove the alert after 3 seconds using JavaScript
         echo "
         <script>
             setTimeout(function(){
@@ -21,41 +22,36 @@
         ";
     }
 
-    //database connection
+    // Database connection
     include_once 'db_config.php';
 
+    // Registration logic
     if(isset($_POST['register'])){
         $email = $_POST['email'];
         $username = $_POST['username'];
         $password = $_POST['password'];
         $confirm_password = $_POST['confirm_password'];
 
-        //email validation
+        // Email validation
         if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
             alert("Invalid Email","error");
         }
-
-        //check if the email is already registered
+        // Check if the email is already registered
         else if(mysqli_num_rows(mysqli_query($conn, "SELECT email FROM user_system WHERE email = '$email'")) > 0){
             alert("Email already registered","error");
         }
-
-        //username must contain a letter and a number
+        // Username must contain a letter and a number
         else if(!preg_match('/[A-Za-z].*[0-9]|[0-9].*[A-Za-z]/', $username)){
             alert("Username must contain a letter and a number","error");
         }
-
-        //check if the username is already registered
+        // Check if the username is already registered
         else if(mysqli_num_rows(mysqli_query($conn, "SELECT username FROM user_system WHERE username = '$username'")) > 0){
             alert("Username already registered","error");
         }
-
-        //password must contain a letter and a number and must be 8 characters long
+        // Password must contain a letter and a number and must be 8 characters long
         else if(!preg_match('/[A-Za-z].*[0-9]|[0-9].*[A-Za-z]/', $password)){
             alert("Password must contain a letter and a number","error");
         }
-
-
         else if($password == $confirm_password){
             $password = md5($password);
 
@@ -72,7 +68,7 @@
         }
     }
 
-
+    // Login logic
     if(isset($_POST['login'])){
         $username = $_POST['username'];
         $password = $_POST['password'];
@@ -91,9 +87,6 @@
             alert("Login Failed","error");
         }
     }
-
-
-
 ?>
 
 
@@ -108,9 +101,7 @@
 </head>
 <body>
 
-
     <div class="background-img"></div>
-
 
     <div class="container">
         <div class="main-menu">
@@ -136,9 +127,6 @@
             </form>
         </div>
     </div>
-    
-
-
 
     <script src="scripts.js"></script>
 </body>
